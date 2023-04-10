@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# You could symlink this to path.
+
+set -eo pipefail
+
+script_dir="$(dirname "${BASH_SOURCE[0]}")"
+
+CHATGPT_CONTEXT="$(pwd | tr -d '/')" OPENAI_API_KEY="${OPENAI_API_KEY}" python3 "$script_dir/chatgpt.py" "$@"
