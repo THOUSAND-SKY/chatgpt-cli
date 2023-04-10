@@ -67,7 +67,8 @@ def chatgpt(query):
             # RETRIEVE THE TEXT FROM THE RESPONSE
             event_text = event['choices'][0]['delta']  # EVENT DELTA RESPONSE
             answer = event_text.get('content', '')  # RETRIEVE CONTENT
-            collected += f" {answer}"
+            if answer:
+                collected += f" {answer}"
         print()
         write()
 
