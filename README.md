@@ -1,5 +1,7 @@
 # ChatGPT CLI
 
+> Now uses https://www.phind.com/ by default.
+
 ChatGPT CLI. Streaming text. Has memory.
 
 ## Installation
@@ -8,13 +10,15 @@ ChatGPT CLI. Streaming text. Has memory.
 
 2. Install the required dependencies
 
-```
-$ pip install openai appdirs
-```
+   ```sh
+   $ python3 -m pip install -r requirements.txt
+   ```
 
-3. Set your OpenAI API key. E.g. `export OPENAI_API_KEY="123"`.
+3. If using openai, set your OpenAI API key. E.g. `export OPENAI_API_KEY="123"`.
 
-You can obtain your API key from the [OpenAI website](https://platform.openai.com/account/api-keys).
+   You can obtain your API key from the [OpenAI website](https://platform.openai.com/account/api-keys).
+
+   Phind is free (for now).
 
 ## Usage
 
@@ -34,11 +38,15 @@ You can also clear the conversation history by passing an empty query:
 $ chatgpt # Clears history
 ```
 
+## Changing the AI
+
+By default it's using phind. You can change to openAI chatGPT by tweaking [chatgpt.py](chatgpt.py), see the end of that file.
+
 ## How it works
 
-The ChatGPT CLI uses the OpenAI ChatCompletion API to interact with the ChatGPT language model. It sends a series of messages as input to the API, including system messages, user messages, and assistant messages. The assistant message contains the response from the model.
+It sends a series of messages as input to the API, including system messages, user messages, and assistant messages. The assistant message contains the response from the model.
 
-The conversation history is stored in a JSON file in the cache directory, which can be customized using the `XDG_CACHE_DIR` environment variable. The program streams the response from the model and displays it on the terminal. It also handles interrupts (SIGINT) to save the conversation history before exiting.
+The conversation history is stored in a JSON file in the cache directory, which can be customized using the `XDG_CACHE_DIR` (usually `~/.cache`) environment variable. The program streams the response from the model and displays it on the terminal. It also handles interrupts (SIGINT) to save the conversation history before exiting.
 
 ## Contributing
 
