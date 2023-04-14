@@ -1,8 +1,8 @@
 # ChatGPT CLI
 
-> Now uses https://www.phind.com/ by default.
-
 ChatGPT CLI. Streaming text. Has memory.
+
+Alternatively you may use phind.com. Change commented lines in `chatgpt.py`.
 
 ## Installation
 
@@ -18,7 +18,7 @@ ChatGPT CLI. Streaming text. Has memory.
 
    You can obtain your API key from the [OpenAI website](https://platform.openai.com/account/api-keys).
 
-   Phind is free (for now).
+   Phind is free. No API key.
 
 ## Usage
 
@@ -40,7 +40,7 @@ $ chatgpt # Clears history
 
 ## Changing the AI
 
-By default it's using phind. You can change to openAI chatGPT by tweaking [chatgpt.py](chatgpt.py), see the end of that file.
+By default it's using chatgpt. You can change to phind.com by tweaking [chatgpt.py](chatgpt.py), see the end of that file.
 
 ## How it works
 

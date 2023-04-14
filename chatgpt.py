@@ -63,5 +63,5 @@ def respond(query, ai_model):
 if __name__ == "__main__":
     query = " ".join(sys.argv[1:])
     # Swap the commented and uncommented lines if need be.
-    # respond(query, openai)
-    respond(query, phind)
+    respond(query, openai)
+    # respond(query, phind)
