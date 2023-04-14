@@ -19,7 +19,7 @@ def respond(query, ai_model):
 
     if not query:
         print("Cleared history.")
-        pathlib.Path(context_file).unlink()
+        pathlib.Path(context_file).unlink(missing_ok=True)
         return None
 
     pathlib.Path(context_file).touch()
