@@ -11,7 +11,7 @@ headers = {
 
 
 def _url(history):
-    if len(history) == 0:
+    if len(history) > 0:
         return 'https://www.phind.com/api/infer/followup/answer'
     return 'https://www.phind.com/api/infer/answer'
 
