@@ -2,7 +2,9 @@
 
 ChatGPT CLI. Streaming text. Has memory.
 
-Alternatively you may use phind.com. Change commented lines in `chatgpt.py`.
+Now uses [phind.com](https://phind.com) by default. Two choices: phind or openai.
+
+Phind specializes in programming.
 
 ## Installation
 
@@ -11,7 +13,7 @@ Alternatively you may use phind.com. Change commented lines in `chatgpt.py`.
 2. Install the required dependencies
 
    ```sh
-   $ python3 -m pip install -r requirements.txt
+   $ python3 -m pip install -r requirements.txt --user
    ```
 
 3. If using openai, set your OpenAI API key. E.g. `export OPENAI_API_KEY="123"`.
@@ -26,8 +28,11 @@ You can run the ChatGPT CLI by executing the Python script with a query as an ar
 
 ```sh
 $ # The included 'chatgpt' script will do per-directory chat history.
+$ # using phind
 $ chatgpt hi what is up # ...or
 $ chatgpt "hi what's up"
+
+$ chatgpt -o hi what is up # openai chatgpt (api key required)
 ```
 
 The query will be used as a user message in the conversation with the model. The program will stream the response from the model and display it on the terminal.
@@ -37,10 +42,6 @@ You can also clear the conversation history by passing an empty query:
 ```sh
 $ chatgpt # Clears history
 ```
-
-## Changing the AI
-
-By default it's using chatgpt. You can change to phind.com by tweaking [chatgpt.py](chatgpt.py), see the end of that file.
 
 ## How it works
 

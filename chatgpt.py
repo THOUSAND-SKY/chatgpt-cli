@@ -1,12 +1,12 @@
 import json
 import os
-import sys
 import pathlib
 import signal
 import appdirs
 import ai.openai as openai
 import ai.phind as phind
 from reactivex import operators as ops
+import argparse
 
 cache_dir = appdirs.user_cache_dir("chatgpt-cli")
 pathlib.Path(cache_dir).mkdir(exist_ok=True)
@@ -61,7 +61,12 @@ def respond(query, ai_model):
 
 # Get the query from command-line argument
 if __name__ == "__main__":
-    query = " ".join(sys.argv[1:])
-    # Swap the commented and uncommented lines if need be.
-    # respond(query, openai)
-    respond(query, phind)
+    parser = argparse.ArgumentParser()
+    # take optional boolean flag -o for openai or -p for phind, and any number of arguments as input
+    parser.add_argument('-o', '--openai', action='store_true', default=False)
+    parser.add_argument('-p', '--phind', action='store_true', default=False)
+    parser.add_argument('args', nargs='*')
+    args = parser.parse_args()
+    model = openai if args.openai else phind
+
+    respond(" ".join(args.args), model)
