@@ -29,15 +29,15 @@ def respond(query, ai_model):
             history = json.load(f)
         except:
             history = {}
-        user_query = [{"role": "user", "content": query}]
-
-        history["chat"] = history.get("chat", []) + user_query
 
         collected = ''
 
         def write(sig=None, frame=None):
+            user_query = [{"role": "user", "content": query}]
+            assistant_ressponse = [
+                {"role": "assistant", "content": collected.strip()}]
             history["chat"] = history.get(
-                "chat", []) + [{"role": "assistant", "content": collected.strip()}]
+                "chat", []) + user_query + assistant_ressponse
 
             f.seek(0)
             json.dump(history, f)
