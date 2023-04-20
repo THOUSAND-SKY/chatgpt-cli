@@ -23,11 +23,11 @@ class FileCache(AbstractCache):
             json.dump(history, f)
 
     def load(self):
-        with open(self._context_file) as f:
-            try:
+        try:
+            with open(self._context_file) as f:
                 return json.load(f)
-            except:
-                return {}
+        except:
+            return {}
 
     def print(self):
         with open(self._context_file) as f:
