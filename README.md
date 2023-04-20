@@ -33,6 +33,8 @@ $ chatgpt hi what is up # ...or
 $ chatgpt "hi what's up"
 
 $ chatgpt -o hi what is up # openai chatgpt (api key required)
+
+$ chatgpt -c 'the `-c` first clears history, then sends this as usual (without history).'
 ```
 
 The query will be used as a user message in the conversation with the model. The program will stream the response from the model and display it on the terminal.
