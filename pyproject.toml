@@ -1,0 +1,13 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools"]
+
+[project]
+dependencies = [
+  "requests",
+  "openai",
+  "rxpy",
+  "appdirs",
+]
+name = "chatgpt-cli"
+version = "1.0.0"
