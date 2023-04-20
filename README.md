@@ -13,7 +13,7 @@ Phind specializes in programming.
 2. Install the required dependencies
 
    ```sh
-   $ python3 -m pip install -r requirements.txt --user
+   $ python3 -m pip install . --user
    ```
 
 3. If using openai, set your OpenAI API key. E.g. `export OPENAI_API_KEY="123"`.
@@ -21,6 +21,12 @@ Phind specializes in programming.
    You can obtain your API key from the [OpenAI website](https://platform.openai.com/account/api-keys).
 
    Phind is free. No API key.
+
+4. Optionally, symlink the provided `chatgpt` script to your path.
+
+   ```sh
+   $ ln -s "$PWD/chatgpt" "$HOME/bin" # assuming ~/bin is in PATH
+   ```
 
 ## Usage
 
