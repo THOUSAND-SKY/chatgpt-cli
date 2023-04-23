@@ -5,6 +5,7 @@ import ai.openai as openai
 import ai.phind as phind
 from reactivex import operators as ops
 import argparse
+import sys
 
 
 def respond(query, ai_model, history_manager: AbstractCache):
@@ -46,7 +47,7 @@ def main():
     parser.add_argument('--print-history', action='store_true', default=False)
     parser.add_argument('args', nargs='*')
     args = parser.parse_args()
-    model = openai if args.openai else phind
+    model = phind if args.phind else openai
 
     history_manager = FileCache()
     # needs to be before
@@ -57,7 +58,7 @@ def main():
     query = " ".join(args.args)
     if args.clear or not query:
         history_manager.clear()
-        print("Cleared history.")
+        print("Cleared history.", file=sys.stderr)
     if not query:
         return None
 

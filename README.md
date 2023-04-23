@@ -2,9 +2,11 @@
 
 ChatGPT CLI. Streaming text. Has memory.
 
-Now uses [phind.com](https://phind.com) by default. Two choices: phind or openai.
+Now using openai again, phind seems to have gone behind cloudflare captcha.
 
-Phind specializes in programming.
+~~Now uses [phind.com](https://phind.com) by default. Two choices: phind or openai.~~
+
+~~Phind specializes in programming.~~
 
 ## Installation
 
@@ -20,7 +22,7 @@ Phind specializes in programming.
 
    You can obtain your API key from the [OpenAI website](https://platform.openai.com/account/api-keys).
 
-   Phind is free. No API key.
+   ~~Phind is free. No API key.~~ Phind is currently not working.
 
 4. Optionally, symlink the provided `chatgpt` script to your path.
 
@@ -34,11 +36,11 @@ You can run the ChatGPT CLI by executing the Python script with a query as an ar
 
 ```sh
 $ # The included 'chatgpt' script will do per-directory chat history.
-$ # using phind
+$ # using openai
 $ chatgpt hi what is up # ...or
 $ chatgpt "hi what's up"
 
-$ chatgpt -o hi what is up # openai chatgpt (api key required)
+$ chatgpt -p hi what is up # phind (doesn't work these days)
 
 $ chatgpt -c 'the `-c` first clears history, then sends this as usual (without history).'
 ```
