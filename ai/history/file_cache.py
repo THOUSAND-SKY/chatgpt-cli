@@ -20,7 +20,7 @@ class FileCache(AbstractCache):
 
     def write(self, history):
         with open(self._context_file, "w") as f:
-            json.dump(history, f)
+            json.dump(history, f, indent=2)
 
     def load(self):
         try:
