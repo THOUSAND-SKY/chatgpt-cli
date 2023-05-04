@@ -42,6 +42,8 @@ You can also clear the conversation history by passing an empty query:
 $ chatgpt # Clears history
 ```
 
+[ai/openai.py](ai/openai.py) contains env variables for request customization, e.g. model name.
+
 ## How it works
 
 It sends a series of messages as input to the API, including system messages, user messages, and assistant messages. The assistant message contains the response from the model.
