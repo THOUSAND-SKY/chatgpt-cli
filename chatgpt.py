@@ -2,7 +2,6 @@ import signal
 from ai.history.abstract import AbstractCache
 from ai.history.file_cache import FileCache
 import ai.openai as openai
-import ai.phind as phind
 from reactivex import operators as ops
 import argparse
 import sys
@@ -41,16 +40,13 @@ def respond(query, ai_model, history_manager: AbstractCache):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', default=False)
-    # take optional boolean flag -o for openai or -p for phind, and any number of arguments as input
+    # `-o` does nothing currently, since phind was removed.
     parser.add_argument('-o', '--openai', action='store_true', default=False)
-    parser.add_argument('-p', '--phind', action='store_true', default=False)
     parser.add_argument('--print-history', action='store_true', default=False)
     parser.add_argument('args', nargs='*')
     args = parser.parse_args()
-    model = phind if args.phind else openai
 
     history_manager = FileCache()
-    # needs to be before
     if args.print_history:
         history_manager.print()
         return None
@@ -62,6 +58,7 @@ def main():
     if not query:
         return None
 
+    model = openai
     respond(query, model, history_manager)
 
 

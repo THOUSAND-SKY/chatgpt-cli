@@ -1,3 +1,6 @@
+"""
+This module is defunct, cloudflare captcha blocks it, and phind has no consumer API.
+"""
 import reactivex as rx
 from reactivex import operators as ops
 import requests
