@@ -27,7 +27,7 @@ def respond(query, ai_model, history_manager: AbstractCache):
 
     def _concat(answer):
         nonlocal collected
-        collected += f" {answer}"
+        collected += answer
 
     ai_model.request(query, history.get("chat", [])).pipe(
         ops.do_action(lambda answer: print(answer, end='', flush=True)),
