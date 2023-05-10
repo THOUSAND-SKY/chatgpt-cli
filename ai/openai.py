@@ -28,8 +28,8 @@ def _fit_history(history, limit):
     def _count_tokens(str):
         return max(ceil(len(str) / 4), 1)
 
-    # Extra 500 char leeway because token counter is rough on the edges.
-    limit -= 500
+    # Extra leeway because token counter is rough on the edges.
+    limit -= 1000
     out = []
     for msg in reversed(history):
         if limit <= 0:

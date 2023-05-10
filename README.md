@@ -2,6 +2,8 @@
 
 ChatGPT CLI. Streaming text. Has memory.
 
+> Here's an alternative with a bunch of features: https://github.com/TheR1D/shell_gpt
+
 ## Installation
 
 1. Clone the repository
