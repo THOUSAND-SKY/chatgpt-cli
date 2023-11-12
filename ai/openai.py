@@ -1,18 +1,17 @@
 import os
-import openai
+from openai import OpenAI
 import reactivex as rx
 from reactivex import operators as ops
 from math import ceil
 
-# Set your OpenAI API key here
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 _openai_env = {
     "model_max_tokens": int(os.environ.get("CHATGPT_CLI_OPENAI_MODEL_MAX_TOKENS", "4000")),
     "max_tokens": int(os.environ.get("CHATGPT_CLI_OPENAI_RESPONSE_MAX_TOKENS", "1000")),
     "model": os.environ.get("CHATGPT_CLI_OPENAI_MODEL", "gpt-3.5-turbo"),
-    "temperature": float(os.environ.get("CHATGPT_CLI_OPENAI_TEMPERATURE", "0.5")),
-    "system_prompt": os.environ.get("CHATGPT_CLI_OPENAI_SYSTEM_PROMPT", "You are ChatGPT, a large language model trained by OpenAI. You answer briefly and to the point.")
+    "temperature": float(os.environ.get("CHATGPT_CLI_OPENAI_TEMPERATURE", "0.3")),
+    "system_prompt": os.environ.get("CHATGPT_CLI_OPENAI_SYSTEM_PROMPT", "You answer briefly and to the point.")
 }
 
 
@@ -29,7 +28,7 @@ def _fit_history(history, limit):
         return max(ceil(len(str) / 4), 1)
 
     # Extra leeway because token counter is rough on the edges.
-    limit -= 1000
+    limit -= limit * 0.2
     out = []
     for msg in reversed(history):
         if limit <= 0:
@@ -45,15 +44,15 @@ def request(query, history):
     _history = history + [_msg("user", query)]
     h = _fit_history(_history, tokens)
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         messages=_system_context + h,
         temperature=_openai_env["temperature"],
         model=_openai_env["model"],
         max_tokens=_openai_env["max_tokens"],
-        stream=True,
+        stream=True
     )
 
     return rx.from_iterable(response).pipe(
-        ops.map(lambda event: event['choices'][0]['delta'].get("content", '')),
+        ops.map(lambda event: event.choices[0].delta.content or ""),
         ops.filter(lambda x: x != "")
     )
