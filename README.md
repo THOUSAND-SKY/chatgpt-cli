@@ -2,6 +2,8 @@
 
 ChatGPT CLI. Streaming text. Has memory.
 
+[Example](scripts/assets/screencast.webm).
+
 > Here's an alternative with a bunch of features: https://github.com/TheR1D/shell_gpt
 
 ## Installation
@@ -55,6 +57,20 @@ The conversation history is stored in a JSON file in the cache directory, which 
 ## Contributing
 
 If you encounter any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request on the GitHub repository: https://github.com/your_username/your_repository
+
+### Known bugs
+
+#### `__chatgpt_shell_integration.fish`
+
+- Some prompts fail at escaping and crash
+- Running in a shell with an altered env sometimes fails for reasons
+  such as modified LD_PRELOAD (or some other c/c++ junk?)
+  e.g. in a `nix shell`.
+- Prompts for shell command querying (e.g. ctrl-q in shell) don't save in shell history
+
+#### Cli
+
+The interactive mode responses can't be cut off with ctrl-c.
 
 ## License
 

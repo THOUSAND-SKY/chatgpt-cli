@@ -5,6 +5,9 @@ import ai.openai as openai
 from reactivex import operators as ops
 import argparse
 import sys
+# Just importing this fixes arrow keys in `input`. Side effects ahoy!
+# I think this is builtin?
+import readline
 
 
 def respond(query, ai_model, history_manager: AbstractCache):
@@ -21,9 +24,13 @@ def respond(query, ai_model, history_manager: AbstractCache):
 
         history_manager.write(history)
         print()
+        # exit(0)
+    
+    def write_and_exit(sig=None, frame=None):
+        write()
         exit(0)
 
-    signal.signal(signal.SIGINT, write)
+    signal.signal(signal.SIGINT, write_and_exit)
 
     def _concat(answer):
         nonlocal collected
@@ -43,6 +50,8 @@ def main():
     # `-o` does nothing currently, since phind was removed.
     parser.add_argument('-o', '--openai', action='store_true', default=False)
     parser.add_argument('--print-history', action='store_true', default=False)
+    parser.add_argument('-i', '--interactive', action='store_true', default=False)
+    parser.add_argument('-q', '--quiet', action='store_true', default=False)
     parser.add_argument('args', nargs='*')
     args = parser.parse_args()
 
@@ -52,13 +61,30 @@ def main():
         return None
 
     query = " ".join(args.args)
-    if args.clear or not query:
+    if args.clear or (not query and not args.interactive):
         history_manager.clear()
-        print("Cleared history.", file=sys.stderr)
-    if not query:
+        if not args.quiet:
+            print("Cleared history.", file=sys.stderr)
+    if not query and not args.interactive:
         return None
-
+    
     model = openai
+    if args.interactive:
+        ctrl_c_counter = 0
+        while True:
+            try:
+                user_input = input(">>> ")
+                if user_input.lower() == 'exit':
+                    return
+                respond(user_input, model, history_manager)
+                ctrl_c_counter = 0
+            except (EOFError, KeyboardInterrupt):
+                ctrl_c_counter += 1
+                if ctrl_c_counter == 2:
+                    return
+            except Exception as e:
+                if not args.quiet:
+                    print("An exception occurred:", str(e))
     respond(query, model, history_manager)
 
 
