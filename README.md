@@ -2,7 +2,7 @@
 
 ChatGPT CLI. Streaming text. Has memory.
 
-[Example](scripts/assets/screencast.webm).
+![Example](scripts/assets/screencast.webp).
 
 > Here's an alternative with a bunch of features: https://github.com/TheR1D/shell_gpt
 
