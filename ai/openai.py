@@ -1,10 +1,10 @@
+from itertools import dropwhile
 import os
-from openai import OpenAI
 import reactivex as rx
 from reactivex import operators as ops
 from math import ceil
 
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+from ai.models import send_message
 
 _openai_env = {
     "model_max_tokens": int(os.environ.get("CHATGPT_CLI_OPENAI_MODEL_MAX_TOKENS", "4000")),
@@ -19,10 +19,6 @@ def _msg(role, content):
     return {"role": role, "content": content}
 
 
-_system_context = [_msg(
-    "system", _openai_env["system_prompt"])]
-
-
 def _fit_history(history, limit):
     def _count_tokens(str):
         return max(ceil(len(str) / 4), 1)
@@ -33,26 +29,25 @@ def _fit_history(history, limit):
     for msg in reversed(history):
         if limit <= 0:
             break
-        t = _count_tokens(msg['content'])
+        t = _count_tokens(msg["content"])
         limit -= t
         out.insert(0, msg)
-    return out
+    return list(dropwhile(lambda t: t['role'] != 'user', out))
 
 
 def request(query, history):
-    tokens = _openai_env['model_max_tokens'] - _openai_env['max_tokens']
+    tokens = _openai_env["model_max_tokens"] - _openai_env["max_tokens"]
     _history = history + [_msg("user", query)]
     h = _fit_history(_history, tokens)
 
-    response = client.chat.completions.create(
-        messages=_system_context + h,
+    response = send_message(
+        system=_openai_env["system_prompt"],
+        messages=h,
         temperature=_openai_env["temperature"],
         model=_openai_env["model"],
         max_tokens=_openai_env["max_tokens"],
-        stream=True
     )
 
-    return rx.from_iterable(response).pipe(
-        ops.map(lambda event: event.choices[0].delta.content or ""),
-        ops.filter(lambda x: x != "")
+    return response.pipe(
+        ops.filter(lambda x: x != ""),
     )
