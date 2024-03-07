@@ -4,6 +4,7 @@ import appdirs
 import pathlib
 
 from ai.history.abstract import AbstractCache
+from ai.openai import fit_history
 
 
 class FileCache(AbstractCache):
@@ -34,6 +35,6 @@ class FileCache(AbstractCache):
             history = json.load(f)
             if history:
                 print("\n\n\n==================\n\n\n".join([item['content']
-                      for item in history["chat"]]))
+                      for item in fit_history(history["chat"])]))
             else:
                 print("no history")

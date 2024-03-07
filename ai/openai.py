@@ -19,7 +19,9 @@ def _msg(role, content):
     return {"role": role, "content": content}
 
 
-def _fit_history(history, limit):
+def fit_history(history):
+    limit = _openai_env["model_max_tokens"] - _openai_env["max_tokens"]
+
     def _count_tokens(str):
         return max(ceil(len(str) / 4), 1)
 
@@ -36,9 +38,8 @@ def _fit_history(history, limit):
 
 
 def request(query, history):
-    tokens = _openai_env["model_max_tokens"] - _openai_env["max_tokens"]
     _history = history + [_msg("user", query)]
-    h = _fit_history(_history, tokens)
+    h = fit_history(_history)
 
     response = send_message(
         system=_openai_env["system_prompt"],
