@@ -5,6 +5,7 @@ import ai.openai as openai
 from reactivex import operators as ops
 import argparse
 import sys
+import select
 # Just importing this fixes arrow keys in `input`. Side effects ahoy!
 # I think this is builtin?
 import readline
@@ -43,6 +44,19 @@ def respond(query, ai_model, history_manager: AbstractCache):
         on_completed=write
     )
 
+def _get_stdin_data():
+    # might only work on unix systems?
+    if select.select([sys.stdin], [], [], 0.0)[0]:
+    #     return sys.stdin.read()
+    # if not sys.stdin.isatty():
+        stdin_data = sys.stdin.read()
+        return "\n\n" + stdin_data
+    return ""
+
+def _build_query(query: str, stdin_data: str):
+    if stdin_data:
+        return query + "\n\n" + stdin_data
+    return query
 
 def main():
     parser = argparse.ArgumentParser()
@@ -60,7 +74,7 @@ def main():
         history_manager.print()
         return None
 
-    query = " ".join(args.args)
+    query = " ".join(args.args) + _get_stdin_data()
     if args.clear or (not query and not args.interactive):
         history_manager.clear()
         if not args.quiet:

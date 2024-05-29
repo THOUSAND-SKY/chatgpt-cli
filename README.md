@@ -60,6 +60,8 @@ If you encounter any issues or have suggestions for improvements, please feel fr
 
 ### Known bugs
 
+- Don't know if works on Windows.
+
 #### `__chatgpt_shell_integration.fish`
 
 - Some prompts fail at escaping and crash
