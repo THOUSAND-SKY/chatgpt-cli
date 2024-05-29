@@ -1,17 +1,22 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = ["setuptools", "poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
 
 [tool.poetry]
-name = "chatgpt-cli"
+name = "chatgpt"
 version = "1.2.0"
 description = "CLI tool for chat-based GPT models"
 authors = ["THOUSAND-SKY <g4gossi@gmail.com>"]
 
+[tool.poetry.scripts]
+get-token = "scripts.get_copilot_token:getToken"
+app = "chatgpt:main"
+
 [tool.poetry.dependencies]
-python = ">=3.8.0"
+python = ">=3.8,<3.13"
 requests = "^2.31.0"
 openai = "^1.13.3"
-rxpy = "^0.1.0"
 appdirs = "^1.4.4"
 anthropic = "^0.19.1"
+pyautogen = "^0.2.17"
+reactivex = "^4.0.4"

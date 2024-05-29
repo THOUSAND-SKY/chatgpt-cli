@@ -1,11 +1,11 @@
 import os
-from typing import Dict, List
 from openai import OpenAI
 import reactivex as rx
 from reactivex import operators as ops
-
 from anthropic import Anthropic
 from anthropic.types import ContentBlockDeltaEvent, ContentBlockStartEvent
+
+from ai.copilot import copilot_chat_completions
 
 
 def send_message(
@@ -46,6 +46,15 @@ def send_message(
                 )
             ),
         )
+
+    if model.startswith("copilot-"):
+        response = copilot_chat_completions(
+            os.environ.get("COPILOT_API_KEY") or "",
+            [{"role": "system", "content": system}] + messages,
+            temperature=temperature,
+            model=model.lstrip("copilot-")
+        )
+        return response
 
     response = OpenAI(api_key=os.environ.get("OPENAI_API_KEY")).chat.completions.create(
         messages=[{"role": "system", "content": system}] + messages,
