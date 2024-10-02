@@ -6,4 +6,5 @@ set -eo pipefail
 
 script_dir="$(dirname "$(readlink -f "${BASH_SOURCE[@]}")")"
 
-CHATGPT_CONTEXT="$(pwd | tr -d '/')" OPENAI_API_KEY="${OPENAI_API_KEY}" python3 "$script_dir/chatgpt.py" "$@"
+[[ -z $CHATGPT_CONTEXT ]] && CHATGPT_CONTEXT="$(pwd | tr -d '/')"
+CHATGPT_CONTEXT="$CHATGPT_CONTEXT" OPENAI_API_KEY="${OPENAI_API_KEY}" python3 "$script_dir/chatgpt.py" "$@"
