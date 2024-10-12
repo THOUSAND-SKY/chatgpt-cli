@@ -2,6 +2,7 @@ import signal
 from ai.history.abstract import AbstractCache
 from ai.history.file_cache import FileCache
 import ai.openai as openai
+import ai.moa as moa
 from reactivex import operators as ops
 import argparse
 import sys
@@ -63,6 +64,7 @@ def main():
     parser.add_argument('-c', '--clear', action='store_true', default=False)
     # `-o` does nothing currently, since phind was removed.
     parser.add_argument('-o', '--openai', action='store_true', default=False)
+    parser.add_argument('-m', '--moa', action='store_true', default=False)
     parser.add_argument('--print-history', action='store_true', default=False)
     parser.add_argument('-i', '--interactive', action='store_true', default=False)
     parser.add_argument('-q', '--quiet', action='store_true', default=False)
@@ -83,6 +85,8 @@ def main():
         return None
     
     model = openai
+    if args.moa:
+        model = moa
     if args.interactive:
         ctrl_c_counter = 0
         while True:

@@ -4,6 +4,7 @@ import reactivex as rx
 from reactivex import operators as ops
 from anthropic import Anthropic
 from anthropic.types import ContentBlockDeltaEvent, ContentBlockStartEvent
+from groq import Groq
 
 from ai.copilot import copilot_chat_completions
 
@@ -46,13 +47,26 @@ def send_message(
                 )
             ),
         )
+    
+    if model.startswith("groq-"):
+        g = Groq(
+            api_key=os.environ.get("GROQ_API_KEY"),
+        )
+        response = g.chat.completions.create(
+            messages=messages,
+            model=model.removeprefix("groq-"),
+            stream=True,
+        )
+        return rx.from_iterable(response).pipe(
+            ops.map(lambda event: event.choices[0].delta.content or ""),
+        )
 
     if model.startswith("copilot-"):
         response = copilot_chat_completions(
             os.environ.get("COPILOT_API_KEY") or "",
             [{"role": "system", "content": system}] + messages,
             temperature=temperature,
-            model=model.lstrip("copilot-")
+            model=model.removeprefix("copilot-")
         )
         return response
 
