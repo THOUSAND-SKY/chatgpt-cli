@@ -43,7 +43,7 @@
               modules = [
                 {
                   # https://devenv.sh/reference/options/
-                  packages = [ ];
+                  packages = [ pkgs.pyright ];
 
                   languages.python.enable = true;
                   languages.python.poetry.enable = true;

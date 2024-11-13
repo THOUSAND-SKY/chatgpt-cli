@@ -27,7 +27,7 @@ def respond(query, ai_model, history_manager: AbstractCache):
         history_manager.write(history)
         print()
         # exit(0)
-    
+
     def write_and_exit(sig=None, frame=None):
         write()
         exit(0)
@@ -83,7 +83,7 @@ def main():
             print("Cleared history.", file=sys.stderr)
     if not query and not args.interactive:
         return None
-    
+
     model = openai
     if args.moa:
         model = moa
