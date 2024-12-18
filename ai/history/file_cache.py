@@ -6,14 +6,19 @@ import pathlib
 from ai.history.abstract import AbstractCache
 from ai.openai import fit_history
 
+_context_var_name = "CHATGPT_CONTEXT"
+_default_context_file = os.environ.get(_context_var_name, "default.json")
+
 
 class FileCache(AbstractCache):
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        context=_default_context_file
+    ) -> None:
         self._cache_dir = appdirs.user_cache_dir("chatgpt-cli")
         pathlib.Path(self._cache_dir).mkdir(exist_ok=True)
-        context_var_name = "CHATGPT_CONTEXT"
-        self._context_file = pathlib.Path(self._cache_dir).joinpath(
-            os.environ.get(context_var_name, "default.json"))
+        self._context_file = pathlib.Path(
+            self._cache_dir).joinpath(context)
         pathlib.Path(self._context_file).touch()
 
     def clear(self):
@@ -38,3 +43,21 @@ class FileCache(AbstractCache):
                       for item in fit_history(history["chat"])]))
             else:
                 print("no history")
+
+
+class TwoWayFileCache(AbstractCache):
+    def __init__(self, load_file=_default_context_file, write_file=_default_context_file):
+        self._from = FileCache(load_file)
+        self._to = FileCache(write_file)
+
+    def clear(self):
+        self._to.clear()
+
+    def write(self, history):
+        self._to.write(history)
+
+    def load(self):
+        return self._from.load()
+
+    def print(self):
+        self._from.print()

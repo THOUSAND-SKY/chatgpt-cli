@@ -1,6 +1,6 @@
 import signal
 from ai.history.abstract import AbstractCache
-from ai.history.file_cache import FileCache
+from ai.history.file_cache import FileCache, TwoWayFileCache
 import ai.openai as openai
 import ai.moa as moa
 from reactivex import operators as ops
@@ -45,19 +45,22 @@ def respond(query, ai_model, history_manager: AbstractCache):
         on_completed=write
     )
 
+
 def _get_stdin_data():
     # might only work on unix systems?
     if select.select([sys.stdin], [], [], 0.0)[0]:
-    #     return sys.stdin.read()
-    # if not sys.stdin.isatty():
+        #     return sys.stdin.read()
+        # if not sys.stdin.isatty():
         stdin_data = sys.stdin.read()
         return "\n\n" + stdin_data
     return ""
+
 
 def _build_query(query: str, stdin_data: str):
     if stdin_data:
         return query + "\n\n" + stdin_data
     return query
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -66,18 +69,25 @@ def main():
     parser.add_argument('-o', '--openai', action='store_true', default=False)
     parser.add_argument('-m', '--moa', action='store_true', default=False)
     parser.add_argument('--print-history', action='store_true', default=False)
-    parser.add_argument('-i', '--interactive', action='store_true', default=False)
+    parser.add_argument('-i', '--interactive',
+                        action='store_true', default=False)
     parser.add_argument('-q', '--quiet', action='store_true', default=False)
+    parser.add_argument('--history-from', dest="history_from", type=str, default='',
+                        help="Take conversation history from another conversation")
+    parser.add_argument('--no-clear', action='store_true', default=False, dest="no_clear",
+                        help="Prevent clearing history.")
     parser.add_argument('args', nargs='*')
     args = parser.parse_args()
 
-    history_manager = FileCache()
+    history_manager = TwoWayFileCache(load_file=args.history_from) if args.history_from else FileCache()
     if args.print_history:
         history_manager.print()
         return None
 
     query = " ".join(args.args) + _get_stdin_data()
     if args.clear or (not query and not args.interactive):
+        if args.no_clear:
+            raise Exception("Won't clear history with --no-clear")
         history_manager.clear()
         if not args.quiet:
             print("Cleared history.", file=sys.stderr)
