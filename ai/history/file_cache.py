@@ -4,7 +4,6 @@ import appdirs
 import pathlib
 
 from ai.history.abstract import AbstractCache
-from ai.openai import fit_history
 
 _context_var_name = "CHATGPT_CONTEXT"
 _default_context_file = os.environ.get(_context_var_name, "default.json")
@@ -35,15 +34,6 @@ class FileCache(AbstractCache):
         except:
             return {}
 
-    def print(self):
-        with open(self._context_file) as f:
-            history = json.load(f)
-            if history:
-                print("\n\n\n==================\n\n\n".join([item['content']
-                      for item in fit_history(history["chat"])]))
-            else:
-                print("no history")
-
 
 class TwoWayFileCache(AbstractCache):
     def __init__(self, load_file=_default_context_file, write_file=_default_context_file):
@@ -58,6 +48,3 @@ class TwoWayFileCache(AbstractCache):
 
     def load(self):
         return self._from.load()
-
-    def print(self):
-        self._from.print()

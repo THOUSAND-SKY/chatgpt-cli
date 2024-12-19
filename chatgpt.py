@@ -68,7 +68,6 @@ def main():
     # `-o` does nothing currently, since phind was removed.
     parser.add_argument('-o', '--openai', action='store_true', default=False)
     parser.add_argument('-m', '--moa', action='store_true', default=False)
-    parser.add_argument('--print-history', action='store_true', default=False)
     parser.add_argument('-i', '--interactive',
                         action='store_true', default=False)
     parser.add_argument('-q', '--quiet', action='store_true', default=False)
@@ -80,9 +79,6 @@ def main():
     args = parser.parse_args()
 
     history_manager = TwoWayFileCache(load_file=args.history_from) if args.history_from else FileCache()
-    if args.print_history:
-        history_manager.print()
-        return None
 
     query = " ".join(args.args) + _get_stdin_data()
     if args.clear or (not query and not args.interactive):

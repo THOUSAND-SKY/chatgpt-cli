@@ -13,7 +13,3 @@ class AbstractCache(ABC):
     @abstractmethod
     def load(self):
         pass
-
-    @abstractmethod
-    def print(self):
-        pass
