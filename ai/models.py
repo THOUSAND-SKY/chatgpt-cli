@@ -47,7 +47,32 @@ def send_message(
                 )
             ),
         )
-    
+
+    if model.startswith("google-"):
+        import google.generativeai as googlegenai
+        googlegenai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+        m = googlegenai.GenerativeModel(
+            'models/' + model.removeprefix("google-"),
+            system_instruction=system,
+            generation_config=googlegenai.GenerationConfig(
+                max_output_tokens=max_tokens,
+                temperature=temperature))
+
+        def transform_msg(message) -> googlegenai.types.content_types.ContentDict:
+            role_map = {
+                "user": "user",
+                "assistant": "model",
+            }
+            return {"role": role_map[message["role"]], "parts": [message["content"]]}
+
+        response = m.generate_content(
+            [transform_msg(m) for m in messages],
+            stream=True)
+        return rx.from_iterable(response).pipe(
+            ops.map(lambda event: ''.join(
+                part.text for part in event.candidates[0].content.parts)),
+        )
+
     if model.startswith("groq-"):
         g = Groq(
             api_key=os.environ.get("GROQ_API_KEY"),

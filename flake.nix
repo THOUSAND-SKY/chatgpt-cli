@@ -25,6 +25,8 @@
           # devenv-up = self.devShells.${system}.default.config.procfileScript;
 
           # make default poetry application
+          # Pretty sure it's broken for google-genai cuz that needs stdenv.cc.cc.lib, but I'm not
+          # atm using this output myself.
           default = mkPoetryApplication {
             projectDir = ./.;
           };
@@ -49,6 +51,10 @@
                   languages.python.poetry.enable = true;
                   languages.python.poetry.activate.enable = true;
                   languages.python.poetry.install.enable = true;
+
+                  env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+                    pkgs.stdenv.cc.cc.lib
+                  ];
 
                   # enterShell = ''
                   #   hello

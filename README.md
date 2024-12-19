@@ -48,6 +48,36 @@ $ chatgpt # Clears history
 
 [ai/openai.py](ai/openai.py) contains env variables for request customization, e.g. model name.
 
+### Models
+
+#### Anthropic <anthropic.com>
+
+`CHATGPT_CLI_OPENAI_MODEL=claude-3-5-sonnet-20241022` + `ANTHROPIC_API_KEY`
+
+#### Google <aistudio.google.com>
+
+Prefix with `google-`.
+
+`CHATGPT_CLI_OPENAI_MODEL=google-gemini-2.0-flash-exp` + `GOOGLE_API_KEY`
+
+#### OpenAI <openai.com>
+
+`CHATGPT_CLI_OPENAI_MODEL=gpt-4o` + `OPENAI_API_KEY`
+
+#### Groq <groq.com>
+
+Prefix with `groq-`.
+
+`CHATGPT_CLI_OPENAI_MODEL=groq-llama3.2-3b-preview` + `GROQ_API_KEY`
+
+#### Github copilot
+
+> I had gh copilot for 30days for the trial, I don't anymore so I don't know if this model will work anymore.
+
+Prefix with `copilot-`.
+
+`CHATGPT_CLI_OPENAI_MODEL=copilot-gpt4o` (Dunno what the model is now, used to be gpt4.)
+
 ## How it works
 
 It sends a series of messages as input to the API, including system messages, user messages, and assistant messages. The assistant message contains the response from the model.
