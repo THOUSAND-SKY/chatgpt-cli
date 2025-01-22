@@ -95,6 +95,18 @@ def send_message(
         )
         return response
 
+    if model.startswith("deepseek-"):
+        response = OpenAI(api_key=os.environ.get("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com").chat.completions.create(
+            messages=[{"role": "system", "content": system}] + messages,
+            temperature=temperature,
+            model=model,
+            max_tokens=max_tokens,
+            stream=True,
+        )
+        return rx.from_iterable(response).pipe(
+            ops.map(lambda event: event.choices[0].delta.content or ""),
+        )
+
     response = OpenAI(api_key=os.environ.get("OPENAI_API_KEY")).chat.completions.create(
         messages=[{"role": "system", "content": system}] + messages,
         temperature=temperature,
